@@ -1,7 +1,7 @@
 <?php
-$host = "localhost"; // or 127.0.0.1
-$user = "root";      // your MySQL username
-$password = "";      // your MySQL password
+$host = "localhost"; 
+$user = "root";      // MySQL username
+$password = "";      //  MySQL password
 $dbname = "task_manager";
 
 $conn = new mysqli($host, $user, $password, $dbname);
