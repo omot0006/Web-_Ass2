@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Task Management System</h1>
+        <nav>
+            <a href="#register">Register</a>
+            <a href="#login">Login</a>
+        </nav>
+    </header>
+
+    <section id="task-section">
+        <h2>My Tasks</h2>
+        <form id="add-task-form">
+            <input type="text" id="task-name" placeholder="Task Name" required>
+            <input type="date" id="due-date" required>
+            <select id="priority">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select>
+            <button type="submit">Add Task</button>
+        </form>
+
+        <div id="task-list">
+            <!-- Task items will appear here -->
+        </div>
+    </section>
+
+    <section id="search-filter">
+        <input type="text" id="search" placeholder="Search tasks...">
+        <button id="filter-btn">Filter</button>
+    </section>
+
+    <footer>
+        <p>Task Management App &copy; 2025</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
