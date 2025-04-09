@@ -1,73 +1,68 @@
-// Sample task array to simulate a database
+const form = document.getElementById("add-task-form");
+const taskList = document.getElementById("task-list");
+const searchInput = document.getElementById("search");
+const filterPriority = document.getElementById("filter-priority");
+const filterStatus = document.getElementById("filter-status");
+
 let tasks = [];
 
-// DOM Elements
-const addTaskForm = document.getElementById('add-task-form');
-const taskList = document.getElementById('task-list');
-const searchInput = document.getElementById('search');
-const filterButton = document.getElementById('filter-btn');
-
-// Handle Task Addition
-addTaskForm.addEventListener('submit', function (e) {
+form.addEventListener("submit", function (e) {
     e.preventDefault();
 
-    const taskName = document.getElementById('task-name').value;
-    const dueDate = document.getElementById('due-date').value;
-    const priority = document.getElementById('priority').value;
-
-    if (!taskName || !dueDate || !priority) {
-        alert('Please fill all fields!');
-        return;
-    }
+    const name = document.getElementById("task-name").value;
+    const dueDate = document.getElementById("due-date").value;
+    const priority = document.getElementById("priority").value;
 
     const task = {
         id: Date.now(),
-        name: taskName,
-        dueDate: dueDate,
-        priority: priority,
+        name,
+        dueDate,
+        priority,
         completed: false
     };
 
     tasks.push(task);
-    renderTasks();
-    addTaskForm.reset(); // Reset form after adding task
+    displayTasks(tasks);
+    form.reset();
 });
 
-// Render Tasks to DOM
-function renderTasks() {
-    taskList.innerHTML = ''; // Clear previous list
+function displayTasks(taskArray) {
+    taskList.innerHTML = "";
+    taskArray.forEach(task => {
+        const taskDiv = document.createElement("div");
+        taskDiv.classList.add("task-item");
 
-    tasks.forEach((task) => {
-        const taskDiv = document.createElement('div');
-        taskDiv.classList.add('task-item');
-        
         taskDiv.innerHTML = `
-            <span>${task.name} - ${task.dueDate} - ${task.priority}</span>
-            <button onclick="toggleTaskCompletion(${task.id})">${task.completed ? 'Completed' : 'Mark as Done'}</button>
-            <button onclick="deleteTask(${task.id})">Delete</button>
+            <strong>${task.name}</strong> 
+            <p>Due: ${task.dueDate}</p>
+            <p>Priority: ${task.priority}</p>
+            <p>Status: ${task.completed ? "Completed" : "Pending"}</p>
+            <button onclick="toggleStatus(${task.id})">${task.completed ? "Mark as Pending" : "Mark as Completed"}</button>
         `;
+
         taskList.appendChild(taskDiv);
     });
 }
 
-// Handle Task Deletion
-function deleteTask(id) {
-    tasks = tasks.filter(task => task.id !== id);
-    renderTasks();
+function toggleStatus(id) {
+    const task = tasks.find(t => t.id === id);
+    if (task) {
+        task.completed = !task.completed;
+        displayTasks(tasks);
+    }
 }
 
-// Toggle Task Completion
-function toggleTaskCompletion(id) {
-    const task = tasks.find(task => task.id === id);
-    task.completed = !task.completed;
-    renderTasks();
-}
-
-// Search Filter
-filterButton.addEventListener('click', function () {
+document.getElementById("filter-btn").addEventListener("click", () => {
     const searchTerm = searchInput.value.toLowerCase();
-    const filteredTasks = tasks.filter(task =>
-        task.name.toLowerCase().includes(searchTerm) ||
-        task.dueDate.includes(searchTerm) ||
-        task.priority.toLowerCase().includes(searchTerm)
-    );
+    const priorityFilter = filterPriority.value;
+    const statusFilter = filterStatus.value;
+
+    const filtered = tasks.filter(task => {
+        const matchSearch = task.name.toLowerCase().includes(searchTerm);
+        const matchPriority = priorityFilter ? task.priority === priorityFilter : true;
+        const matchStatus = statusFilter ? (statusFilter === "Completed" ? task.completed : !task.completed) : true;
+        return matchSearch && matchPriority && matchStatus;
+    });
+
+    displayTasks(filtered);
+});
